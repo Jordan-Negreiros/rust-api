@@ -1,10 +1,12 @@
 #[macro_use]
 extern crate rocket;
 
+use api::get_tempo_handler;
+use api::post_cities;
 
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .attach(api::get_tempo_handler::stage())
-        .attach(api::post_cities::stage())
+        .attach(get_tempo_handler::stage())
+        .attach(post_cities::stage())
 }

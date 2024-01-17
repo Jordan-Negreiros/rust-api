@@ -18,10 +18,3 @@ pub struct DailyForecast {
     pub temperature_2m_max: f64,
     pub temperature_2m_min: f64,
 }
-
-#[derive(Debug)]
-pub struct Location {
-    pub city: String,
-    pub latitude: f64,
-    pub longitude: f64,
-}

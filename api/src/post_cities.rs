@@ -1,12 +1,12 @@
-use rocket::{post, routes};
 use rocket::response::status::Created;
 use rocket::serde::json::Json;
+use rocket::{post, routes};
 
 use application::usecase;
-use domain::models::City;
+use domain::models::NewCity;
 
-#[post("/cities", format = "json", data = "<city>")]
-pub fn create_city(city: Json<City>) -> Created<String> {
+#[post("/", format = "json", data = "<city>")]
+pub fn create_city(city: Json<NewCity>) -> Created<String> {
     usecase::post_cities::create_city(city)
 }
 

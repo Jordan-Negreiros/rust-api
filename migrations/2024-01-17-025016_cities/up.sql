@@ -1,0 +1,9 @@
+-- Your SQL goes here
+CREATE TABLE city (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    state VARCHAR(255) NOT NULL,
+    country VARCHAR(255) NOT NULL,
+    latitude DOUBLE PRECISION NOT NULL,
+    longitude DOUBLE PRECISION NOT NULL
+)
