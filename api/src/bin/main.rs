@@ -6,4 +6,5 @@ extern crate rocket;
 fn rocket() -> _ {
     rocket::build()
         .attach(api::get_tempo_handler::stage())
+        .attach(api::post_cities::stage())
 }

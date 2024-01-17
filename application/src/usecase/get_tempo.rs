@@ -2,24 +2,20 @@ use rocket::serde::json::{Json, json, Value};
 
 use crate::dto::climatempo::{DailyForecast, ForecastResponse, Location};
 
-pub async fn temperature(api_url: &str, city: &str) -> Json<Value> {
+pub async fn temperature(api_url: &str, city: String) -> Json<Value> {
     let location = get_location(&city);
     let url = format!("{}/forecast?latitude={}&longitude={}&hourly=temperature_2m", api_url, location.latitude, location.longitude);
 
-    let response: ForecastResponse = reqwest::get(url)
-        .await
-        .expect("request failed")
-        .json()
-        .await
-        .expect("json parsing failed");
+    let response = reqwest::get(url);
+    let forecast = response.await.unwrap().json::<ForecastResponse>().await.unwrap();
 
     let today = DailyForecast {
-        temperature_2m_max: response.hourly.temperature_2m.iter().max_by(|a, b| a.partial_cmp(b).unwrap()).unwrap().clone(),
-        temperature_2m_min: response.hourly.temperature_2m.iter().min_by(|a, b| a.partial_cmp(b).unwrap()).unwrap().clone(),
+        temperature_2m_max: forecast.hourly.temperature_2m.iter().max_by(|a, b| a.partial_cmp(b).unwrap()).unwrap().clone(),
+        temperature_2m_min: forecast.hourly.temperature_2m.iter().min_by(|a, b| a.partial_cmp(b).unwrap()).unwrap().clone(),
     };
 
     Json(json!({
-        "city": location.city,
+        "City": location.city,
         "max": today.temperature_2m_max,
         "min": today.temperature_2m_min,
     }))

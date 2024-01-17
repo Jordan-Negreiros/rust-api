@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:15.1
+    restart: always
+    environment:
+      - POSTGRES_USER=climatempo
+      - POSTGRES_PASSWORD=climatempo
+      - POSTGRES_DB=climatempo
+    user: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - /home/my_user/volumes/postgres/data:/var/lib/postgresql/data
+      - /home/my_user/volumes/postgres/config:/etc/postgresql
+  postgres_setup:
+    image: postgres:15.1
+    user: root
+    volumes:
+      - /home/my_user/volumes/postgres/data:/var/lib/postgresql/data
+      - /home/my_user/volumes/postgres/config:/etc/postgresql
+    entrypoint: [ "bash", "-c", "chmod 750 -R /var/lib/postgresql/data && chmod 750 -R /etc/postgresql"]
+    depends_on:
+      - postgres
+  pgadmin4:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=climatempo@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=climatempo
+      - PGADMIN_LISTEN_ADDRESS=0.0.0.0
+    user: root
+    ports:
+      - "5050:80"
+    volumes:
+      - /home/my_user/volumes/pgadmin/data:/var/lib/pgadmin
+    depends_on:
+      - postgres_setup
